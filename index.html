@@ -57,13 +57,28 @@
       background: rgba(0, 0, 0, 0.3);
     }
 
-    .audio-container audio {
+    .audio-controls {
       width: 100%;
       max-width: 400px;
-      position: absolute;
-      top: 0;
-      left: 0;
-      opacity: 0;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .audio-controls button {
+      background: rgba(0, 0, 0, 0.7);
+      border: none;
+      color: white;
+      font-size: 20px;
+      padding: 15px 20px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .audio-controls button:hover {
+      background: rgba(0, 0, 0, 0.9);
     }
 
     .link-button {
@@ -104,10 +119,14 @@
 
   <div class="audio-container">
     <canvas id="audio-spectrum"></canvas>
-    <audio id="audio" controls>
+    <audio id="audio" preload="auto">
       <source src="audio/tupreview.mp3" type="audio/mpeg">
       Tu navegador no soporta el reproductor de audio.
     </audio>
+  </div>
+
+  <div class="audio-controls">
+    <button id="playPauseBtn">▶</button>
   </div>
 
   <a class="link-button" href="spotify:artist:3KPmuodEFWyia5LeUF7iHM">
@@ -141,6 +160,8 @@
     const bufferLength = analyser.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
 
+    const playPauseBtn = document.getElementById('playPauseBtn');
+
     function draw() {
       requestAnimationFrame(draw);
       analyser.getByteFrequencyData(dataArray);
@@ -167,6 +188,16 @@
         draw();
       });
     };
+
+    playPauseBtn.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.play();
+        playPauseBtn.textContent = '⏸';
+      } else {
+        audio.pause();
+        playPauseBtn.textContent = '▶';
+      }
+    });
   </script>
 
 </body>
