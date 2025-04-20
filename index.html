@@ -90,11 +90,13 @@
     Tu navegador no soporta el reproductor de audio.
   </audio>
 
-  <a class="link-button" href="spotify:artist:3KPmuodEFWyia5LeUF7iHM">
+  <!-- Botón de Spotify con intento de abrir app -->
+  <a class="link-button" href="#" onclick="abrirSpotify()">
     <img src="https://upload.wikimedia.org/wikipedia/commons/2/26/Spotify_logo_with_text.svg" alt="Spotify">
     Escúchalo en Spotify
   </a>
 
+  <!-- Otros enlaces -->
   <a class="link-button" href="https://music.apple.com/gt/artist/abraham-amado/tu-id">
     <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple Music">
     Escúchalo en Apple Music
@@ -104,6 +106,18 @@
     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
     Compartir en WhatsApp
   </a>
+
+  <script>
+    function abrirSpotify() {
+      // Intenta abrir la app de Spotify
+      window.location.href = "spotify:artist:3KPmuodEFWyia5LeUF7iHM";
+
+      // Después de 1 segundo, redirige a la web si no funciona
+      setTimeout(function() {
+        window.location.href = "https://open.spotify.com/artist/3KPmuodEFWyia5LeUF7iHM";
+      }, 1000);
+    }
+  </script>
 
 </body>
 </html>
