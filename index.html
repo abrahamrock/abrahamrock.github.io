@@ -43,42 +43,10 @@
       text-align: center;
     }
 
-    .audio-container {
-      position: relative;
+    audio {
       width: 100%;
       max-width: 400px;
       margin-bottom: 30px;
-    }
-
-    .audio-container canvas {
-      width: 100%;
-      height: 50px;
-      border-radius: 10px;
-      background: rgba(0, 0, 0, 0.3);
-    }
-
-    .audio-controls {
-      width: 100%;
-      max-width: 400px;
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin-top: 20px;
-    }
-
-    .audio-controls button {
-      background: rgba(0, 0, 0, 0.7);
-      border: none;
-      color: white;
-      font-size: 20px;
-      padding: 15px 20px;
-      border-radius: 50%;
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
-
-    .audio-controls button:hover {
-      background: rgba(0, 0, 0, 0.9);
     }
 
     .link-button {
@@ -117,17 +85,10 @@
   <h1>Tú</h1>
   <h2>Abraham Amado</h2>
 
-  <div class="audio-container">
-    <canvas id="audio-spectrum"></canvas>
-    <audio id="audio" preload="auto">
-      <source src="audio/tupreview.mp3" type="audio/mpeg">
-      Tu navegador no soporta el reproductor de audio.
-    </audio>
-  </div>
-
-  <div class="audio-controls">
-    <button id="playPauseBtn">▶</button>
-  </div>
+  <audio controls>
+    <source src="audio/tupreview.mp3" type="audio/mpeg">
+    Tu navegador no soporta el reproductor de audio.
+  </audio>
 
   <a class="link-button" href="spotify:artist:3KPmuodEFWyia5LeUF7iHM">
     <img src="https://upload.wikimedia.org/wikipedia/commons/2/26/Spotify_logo_with_text.svg" alt="Spotify">
@@ -143,62 +104,6 @@
     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
     Compartir en WhatsApp
   </a>
-
-  <script>
-    const audio = document.getElementById('audio');
-    const canvas = document.getElementById('audio-spectrum');
-    const ctx = canvas.getContext('2d');
-
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    const analyser = audioContext.createAnalyser();
-    const source = audioContext.createMediaElementSource(audio);
-
-    source.connect(analyser);
-    analyser.connect(audioContext.destination);
-
-    analyser.fftSize = 256;
-    const bufferLength = analyser.frequencyBinCount;
-    const dataArray = new Uint8Array(bufferLength);
-
-    const playPauseBtn = document.getElementById('playPauseBtn');
-
-    function draw() {
-      requestAnimationFrame(draw);
-      analyser.getByteFrequencyData(dataArray);
-
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      const barWidth = (canvas.width / bufferLength) * 2.5;
-      let barHeight;
-      let x = 0;
-
-      for (let i = 0; i < bufferLength; i++) {
-        barHeight = dataArray[i];
-
-        ctx.fillStyle = `rgb(${barHeight + 100}, 50, ${255 - barHeight})`;
-        ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
-
-        x += barWidth + 1;
-      }
-    }
-
-    audio.onplay = () => {
-      audioContext.resume().then(() => {
-        draw();
-      });
-    };
-
-    playPauseBtn.addEventListener('click', () => {
-      if (audio.paused) {
-        audio.play();
-        playPauseBtn.textContent = '⏸';
-      } else {
-        audio.pause();
-        playPauseBtn.textContent = '▶';
-      }
-    });
-  </script>
 
 </body>
 </html>
